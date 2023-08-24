@@ -28,7 +28,7 @@ router.post('/login',
     if(!req.user){
         return res.status(400).send({status: 'error', error: 'invalid credentials'})
     }
-   
+    req.session.user = req.user
     res.cookie(env.jwt_cookie_name, req.user.token).redirect('/products')
     
 })

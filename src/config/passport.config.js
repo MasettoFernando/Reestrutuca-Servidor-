@@ -8,8 +8,8 @@ import env from './environment.config.js'
 import { userService } from "../services/index.js";
 
 const LocalStrategy= local.Strategy
-const JWTStrategy= passport_jwt.Strategy
-const cm= new cartManager()
+const JWTStrategy = passport_jwt.Strategy
+const cartManager = new CartManager()
 
 const initializePassport=()=>{
     //register
@@ -25,17 +25,21 @@ const initializePassport=()=>{
                 return done(null, false)
             }
             const cart= await cartManager.createCart()
+            let rol
             if(email== 'adminCoder@coder.com'){
-                const rol= 'admin'    
+                rol= 'admin'    
             }else{
-                const rol='user'
+                rol='user'
             } 
             const cartAsignated= cart._id
             const newUser={
-                fullName: `${first_name} ${last_name}`, age, email,
+                first_name,
+                last_name,
+                age,
+                email,
                 password: createHash(password),
-                rol: rol,
-                cart:cartAsignated
+                rol,
+                cart: cartAsignated
             }
             const result = await userService.create(newUser)
             return done(null, result)
@@ -69,9 +73,12 @@ const initializePassport=()=>{
         try {
             const user= await userService.getByEmail(profile._json.email)
             if(user)return done(null, user)
-            const newUser= await userService.create({
+            const cart = await cartManager.createCart()
+            const cartAsignated = cart._id
+            const newUser = await userService.create({
                 first_name: profile._json.name,
-                email: profile._json.email
+                email: profile._json.email,
+                cart: cartAsignated
             })
             return done(null, newUser)
         } catch (error) {

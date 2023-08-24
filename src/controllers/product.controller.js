@@ -1,26 +1,37 @@
 import ProductManager from "../dao/productManager.js";
+import CustomError from '../services/errors/custom_error.js'
+import EErros from '../services/errors/enums.js'
+import { addProductErrorInfo } from '../services/errors/info.js'
+import { generateProductsMock, generateUserMock } from "../mocking/mock.js";
+import createLogger from '../logs/loggers.js'
 
 const productManager= new ProductManager()
 
 const getProductById = async(req, res)=>{
     const pid= req.params.pid
     const product= await productManager.getProductsById(pid)
-    const user= req.user
+    const user= req.user.user
     res.render('details', {product, user})
 }
 
 const addProducts= async(req, res)=>{
     const data = req.body
-    if(!data.title||
-    !data.description||
-    !data.price||
-    !data.category||
-    !data.stock
+    if( !data.title||
+        !data.description||
+        !data.price||
+        !data.category||
+        !data.stock
     ){
-        res.status(206).send("incomplete fields")
+        CustomError.createError({
+            name: "product creation error",
+            cause: addProductErrorInfo(data),
+            message: "Error trying to create a product",
+            code: EErros.INVALID_TYPES_ERROR
+        })
    }else{
         await productManager.addProducts(data)
         res.status(201).send("Product created")
+        res.status(201)
     }
 }
 
@@ -32,18 +43,24 @@ const updateProduct= async(req, res)=>{
 }
 const deleteProduct= async (req, res) => {
     const pid = req.params.pid
-    await productManager.deleteProduct(pid)
-    res.send("Product deleted")  
+    try {
+        await productManager.deleteProduct(pid)
+        res.status(201)
+        createLogger.warning(`Product ${pid} has been deleted`)
+    } catch (error) {
+        createLogger.error(error)
+    } 
 }
 const getProductsPaginated= async(req, res)=>{
     //params
     let limit= req.query.limit
-    if(!limit)limit=3
     let page= req.query.page
-    if(!page)page=1
+    let sort= req.query.sort
     const category= req.query.category
-
-    const sort= req.query.sort
+    if(!page)page=1
+    if(!limit)limit=3
+    if (sort !== 'asc' && sort !== 'desc') sort = false 
+    
     //functions
     const result= await productManager.getProductsPaginated(limit, page, category, sort)
     if(category){
@@ -55,8 +72,21 @@ const getProductsPaginated= async(req, res)=>{
     }
     
     const user= req.user.user
-    
     res.render('home', {result, user})
 }
 
-export default {getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated }
+const mockingProducts = async (req, res) => {
+    const docs = []
+    const qtyOfMocks = 100
+
+    for (let i  = 0; i < qtyOfMocks ; i++){
+        docs.push(generateProductsMock())
+    }
+    const user = generateUserMock()
+    const result = {
+        docs: docs
+    }
+    res.render('home', {result, user})
+}
+
+export default {getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated, mockingProducts}

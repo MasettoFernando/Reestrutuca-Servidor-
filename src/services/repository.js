@@ -7,6 +7,12 @@ export default class repository {
     get = async (params) => {
         return this.dao.get(params, this.model)
     }
+    paginate = async (limit, page, category, sort) => {
+        return this.dao.paginate(limit, page, category, sort, this.model)
+    }
+    getByIdPopulate= async(id, populate)=>{
+        return this.dao.getByIdPopulate(id, populate, this.model)
+    }
     getById = async (id) => {
         return this.dao.getById(id, this.model)
     }

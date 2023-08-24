@@ -1,4 +1,7 @@
-import {cartService} from '../services/index.js'
+import {cartService, productService} from '../services/index.js'
+import TicketManager from './ticketManager.js'
+
+const ticketManager = new TicketManager()
 
 class CartManager{
     
@@ -17,7 +20,8 @@ class CartManager{
         return result
     }
     getProductsFromACart= async(cid)=>{
-        const cartToShow = await cartService.getById(cid).populate('products.pid').lean().exec()
+        const populate = 'products.pid'
+        const cartToShow = await cartService.getByIdPopulate(cid, populate)
         return(cartToShow)  
     }
     getCartById=async(cid)=>{
@@ -39,34 +43,35 @@ class CartManager{
                 qty: 1            
             })
         }
-        const result= await cartService.update(cartSelected, cid)
-        console.log(result)
-        console.log(`Product ${pid} added to cart ${cid}`)
+        await cartService.update(cartSelected, cid)
 
     }
     deleteOneCart= async(cid)=>{
-        const toDelete= await cartService.delete(cid)
-        console.log(toDelete)
+        await cartService.delete(cid)
     }
-    deleteOneProductFromACart= async(cid, pid)=>{
-        const cartSelected= await cartService.getById(cid)
-        const productToDelete= cartSelected.products.find(x => x.pid == pid)
-        const idx= cartSelected.products.findIndex(x => x.pid == pid)
-        if(productToDelete.qty > 1){
-            productToDelete.qty = productToDelete.qty-1
-        }else{
-            cartSelected.products.splice(idx, 1)
+
+    deleteAllproductsFromACart= async(cid)=>{
+        const populate = 'products.pid'
+        const cart = await cartService.getByIdPopulate(cid, populate)
+        const products= cart.products 
+        
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i];
+            const pid= product.pid._id
+            await this.deleteOneProductFromACart(cid, pid)
         }
-        const result= await cartService.update( cid, cartSelected)
-        console.log(`Product ${pid} eliminated from cart${cid}`)
-        console.log(result)
     }
-    updateCart= async(cid, newData)=>{
-        const cartToUpdate= await cartService.getById(cid)
-        cartToUpdate.products=[]
-        cartToUpdate.products.push(newData)
-        const result= await cartService.update(cid, cartToUpdate)
-        console.log(result)
+
+    deleteOneProductFromACart= async(cid, pid)=>{
+        const cartSelected = await cartService.getById(cid)
+        const idx = cartSelected.products.findIndex(x => x.pid == pid)
+
+        cartSelected.products.splice(idx, 1)
+        const result = await cartService.update(cartSelected, cid)
+        return result
+    }
+    updateCart= async(newData, cid)=>{
+        await cartService.update(newData, cid)
     }
     updateProductQty= async(cid, pid, newQty)=>{
         const cartToUpdate= await cartService.getById(cid)
@@ -78,8 +83,41 @@ class CartManager{
             pid: pid,
             qty: newQty
         })
-        const result= await cartService.update(cid, cartToUpdate)
-        console.log(result)
+        await cartService.update(cid, cartToUpdate)
+    }
+    purchase = async (cid, email) => {
+        const populate = 'products.pid'
+        const cart = await cartService.getByIdPopulate(cid, populate)
+        const products = cart.products
+        const unavailables = []
+        const productsLeft = []
+        for (let index = 0; index < products.length; index++) {
+            const product = products[index]
+            const pid = product.pid._id.toString()
+            if (product.pid.stock < product.qty) {
+                console.log(`not enough stock at ${product.pid.title}`)
+                unavailables.push(pid)
+                await this.deleteOneProductFromACart(cid, pid)
+            } else {
+                let stockAux = product.pid.stock - product.qty
+                const newStock = {
+                    stock: stockAux
+                }
+                await productService.update(newStock, pid)
+            }
+        }
+        
+        if(unavailables.length == 0){
+            await ticketManager.generateTicket(cid, email)
+            await this.deleteAllproductsFromACart(cid)
+        }else{
+            await ticketManager.generateTicket(cid, email)
+            await this.deleteAllproductsFromACart(cid)
+            for (let index = 0; index < unavailables.length; index++) {
+                const pid = unavailables[index]
+                await this.addProductToCart(cid, pid)
+            }
+        }
     }
 }
 
