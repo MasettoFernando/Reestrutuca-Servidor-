@@ -15,6 +15,15 @@ import errorHandler from './middlewares/error.js'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
 
+/*
+STATUS CODE 
+100-199: Respuestas informativas
+200-299: Respuestas satisfactorias
+300-399: Redirecciones
+400-499: Errores del clinete
+500-599: Errores del servidor
+*/
+
 mongoose.set("strictQuery", false)
 
 const app= express()

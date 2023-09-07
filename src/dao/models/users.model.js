@@ -20,6 +20,16 @@ export default class UserModel{
             cart: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "carts"
+            },
+            documents: [
+                {
+                    name: String,      // Nombre del documento
+                    reference: String  // Enlace al documento
+                }
+            ],
+            last_connection: {
+                type: Date,          // Fecha y hora de la última conexión
+                default: null       // Valor predeterminado, puede ser null o inicializado según tus necesidades
             }
         }
     }
