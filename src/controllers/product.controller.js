@@ -16,6 +16,10 @@ const getProductById = async(req, res)=>{
     res.render('details', {product, user})
 }
 
+const getProductForm = (req, res) => {
+    res.render('admin')
+}
+
 const addProducts= async(req, res)=>{
     const data = req.body
     if( !data.title||
@@ -106,4 +110,4 @@ const getBill = async (req, res) => {
     //res.status(200).json({status: 'succes', message: 'Getbill...'})
 }
 
-export default {getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated, mockingProducts, getBill}
+export default {getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated, mockingProducts, getBill, getProductForm}

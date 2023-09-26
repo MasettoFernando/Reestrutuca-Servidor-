@@ -22,7 +22,7 @@ export default class repository {
     save = async (data) => {
         return this.dao.insert(data, this.model)
     }
-    update = async (data) => {
+    update = async (data, id) => {
         return this.dao.update(data, id, this.model)
     }
     delete = async (id) => {

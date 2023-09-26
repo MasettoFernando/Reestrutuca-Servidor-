@@ -61,7 +61,7 @@ class CartManager{
             await this.deleteOneProductFromACart(cid, pid)
         }
     }
-
+    
     deleteOneProductFromACart= async(cid, pid)=>{
         const cartSelected = await cartService.getById(cid)
         const idx = cartSelected.products.findIndex(x => x.pid == pid)

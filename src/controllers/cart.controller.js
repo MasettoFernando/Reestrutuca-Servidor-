@@ -1,4 +1,4 @@
-import crateLogger from '../logs/loggers.js'
+import createLogger from '../logs/loggers.js'
 import CartManager from '../dao/cartManager.js'
 import handlebars from 'express-handlebars'
 
@@ -52,16 +52,18 @@ const updateProductQty= async(req, res)=>{
     await cartManager.updateProductQty(cid, pid, newQty)
     res.send('product qty updated')
 }
-const deleteOneProductFromACart= async(req, res)=>{
-    const cid= req.params.cid
-    const pid= req.params.pid
+const deleteOneProductFromACart = async (req, res) => {
+    const cid = req.params.cid
+    const pid = req.params.pid
     try {
         await cartManager.deleteOneProductFromACart(cid, pid)
         createLogger.info(`Product ${pid} has been deleted from Cart ${cid}`)
-        res.status(200)
+        res.status(200).send();
     } catch (error) {
         createLogger.error(error)
+        console.log('catch')
     }
+ 
 }
 const deleteOneCart= async(req, res)=>{
     const cid= req.params.cid

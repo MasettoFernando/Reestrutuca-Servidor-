@@ -16,7 +16,7 @@ router.put('/:cid', cartController.updateCart)
 //PUT api/carts/:cid/products/:pid -->Update the qty in one product
 router.put('/:cid/products/:pid', cartController.updateProductQty)
 //PUT /api/carts/:cid/products/:pid -->
-router.put('/:cid/products/:pid', cartController.deleteOneProductFromACart)
+router.delete('/:cid/products/:pid', cartController.deleteOneProductFromACart)
 //DELETE /api/carts/:cid -> delete a cart by thc
 router.delete('/:cid', cartController.deleteOneCart)
 
