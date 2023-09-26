@@ -50,7 +50,7 @@ const swaggerOptions= {
     definition:{
         openapi: '3.0.1',
         info: {
-            title: 'documentation from E-commerce adidas for CoderHouse',
+            title: 'documentation from E-commerce Nike',
             description: 'Documentation from my project'
         }
     },

@@ -28,7 +28,7 @@ export default class ProductModel {
             },
             thumbnail: {
                 type: String,
-                default: "https://static.vecteezy.com/system/resources/thumbnails/010/994/276/small/adidas-logo-symbol-clothes-design-icon-abstract-football-illustration-free-vector.jpg"
+                default: "https://www.inspireuplift.com/resizer/?image=https://cdn.inspireuplift.com/uploads/images/seller_products/1678072227_3.jpg&width=600&height=600&quality=90&format=auto&fit=pad"
             },
             code: {
                 type: String,

@@ -1,41 +1,41 @@
 [
     {
-        "title": "Remera Adidas future icon",
+        "title": "Remera NIKE",
         "description":"Su tejido de algodón suave se siente tan bien que posiblemente no te la vas a querer quitar.",
         "price": 40 ,
         "category":"SPORTSWEAR",
         "status": true,
-        "thumbnail":"https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/5251e29bcff142b693a8add800aeaad9_9366/Remera_Future_Icons_Logo_Rosa_HF4753_01_laydown.jpg", 
+        "thumbnail":"https://i.pinimg.com/1200x/7f/a6/e8/7fa6e85657647d1605aa7ce98161610e.jpg", 
         "code":"POASDP",
         "stock":12
     },
     {
-        "title": "Adidas Run Falcon 2.0",
+        "title": "Zapatilla NIKE",
         "description":"Su exterior de malla ofrece transpirabilidad que mantiene tus pies frescos de la mañana a la noche. La suela tipo cupsole de caucho brinda la estabilidad necesaria para enfrentarte a todo lo que te depare el día.",
         "price":70,
         "category":"SNEAKER",
         "status": true,
-        "thumbnail":"https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2a287dc464ec4d198991aeef00dd7a35_9366/Zapatillas_Run_Falcon_2.0_Violeta_GV9576_01_standard.jpg", 
+        "thumbnail":"https://www.tripstore.com.ar/media/catalog/product/cache/4769e4d9f3516e60f2b4303f8e5014a8/C/J/CJ0636-100_0.jpg", 
         "code":"XFG56R",
         "stock":11
     },
     {
-        "title": "Argentina anthem jacket game day",
+        "title": "Campera NIKE",
         "description":"Su ajuste ceñido y estilizado con forro interno de malla suave te mantiene cómodo en todo momento.",
         "price":80,
         "category":"SPORTSWEAR",
         "status": true,
-        "thumbnail":"https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/5b5ad14805e64b769136aeef00afad7f_9366/Campera_Anthem_Argentina_Game_Day_Blanco_IC4446_21_model.jpg", 
+        "thumbnail":"https://www.tripstore.com.ar/media/catalog/product/cache/4769e4d9f3516e60f2b4303f8e5014a8/D/A/DA0001-084_0.jpg", 
         "code":"D5J6G4",
         "stock":33
     },{
         
-        "title": "Adidas bucket hat",
+        "title": "Gorro NIKE",
         "description":"Ponete un gorro pescador, uno adidas nada menos, y de repente tu cabeza está, bueno, delante de la competencia.",
         "price":30,
         "category":"ACCESORIES",
         "status": true,
-        "thumbnail":"https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/7796ba5aee8a4671a617ae62012f962e_9366/Gorro_Pescador_Negro_HM1304_01_standard.jpg", 
+        "thumbnail":"https://images.vestiairecollective.com/cdn-cgi/image/w=1246,q=70,f=auto,/produit/sombreros-gorros-nike-acg-de-poliester-negro-24893258-2_4.jpg", 
         "code":"KJ4H6F",
         "stock":10
     }
