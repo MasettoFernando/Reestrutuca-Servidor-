@@ -4,6 +4,8 @@ import EErros from '../services/errors/enums.js'
 import { addProductErrorInfo } from '../services/errors/info.js'
 import { generateProductsMock, generateUserMock } from "../mocking/mock.js";
 import createLogger from '../logs/loggers.js'
+import transporter from "../config/email.config.js";
+import env from '../config/environment.config.js'
 
 const productManager= new ProductManager()
 
@@ -89,4 +91,19 @@ const mockingProducts = async (req, res) => {
     res.render('home', {result, user})
 }
 
-export default {getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated, mockingProducts}
+const getBill = async (req, res) => {
+    const userToSend = req.body.email
+
+    transporter.sendMail({
+        from: env.gmail_user ,
+        to: userToSend,
+        subject: 'Hola Mundo ',
+        html: 'Hola Mundo'
+    })
+        .then(() => res.status(200).json({status: 'succes', message: 'Getbill...'}))
+        .catch(() => res.status(500).json({status: 'error', message: error.message}))
+
+    //res.status(200).json({status: 'succes', message: 'Getbill...'})
+}
+
+export default {getProductById, addProducts, updateProduct, deleteProduct, getProductsPaginated, mockingProducts, getBill}

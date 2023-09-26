@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import env from '../config/environment.config.js'
-const upload = require('../multer/multer.js');
 const router= Router()
 // GET /session/register --> Shows the register form
 router.get('/register',(req, res)=>{
@@ -50,31 +49,6 @@ router.get('/githubcallback',
 router.get('/logout', (req, res)=>{
     res.clearCookie(env.jwt_cookie_name).redirect('/session/login')
 })
-
-// Endpoint para subir documentos
-router.post('/api/users/:uid/documents', upload.array('documents'), async (req, res) => {
-    try {
-        const { uid } = req.params;
-        const user = await UserModel.findById(uid);
-
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-        // Procesar los archivos subidos y actualizar el estado del usuario
-        user.documents = req.files.map(file => ({
-            name: file.originalname,
-            reference: file.filename,
-        }));
-
-        await user.save();
-
-        return res.status(200).json({ message: 'Documentos subidos exitosamente' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al subir documentos' });
-    }
-});
 
 // Endpoint para actualizar el usuario a premium
 router.post('/api/users/premium/:uid', async (req, res) => {

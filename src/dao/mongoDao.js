@@ -4,7 +4,7 @@ import CartModel from "./models/carts.model.js";
 import UserModel from "./models/users.model.js";
 import mongoosePaginate from "mongoose-paginate-v2";
 import TicketModel from "./models/ticketModel.js";
-import CustomError from '../services/console.error(/enums.js);'
+import CustomError from '../services/errors/custom_error.js'
 import EErros from '../services/errors/enums.js'
 import { notFoundModelErrorInfo  } from '../services/errors/info.js'
 

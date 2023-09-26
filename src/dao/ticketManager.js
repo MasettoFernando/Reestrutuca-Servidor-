@@ -2,7 +2,7 @@ import { ticketService } from "../services/index.js";
 import { cartService } from "../services/index.js";
 import nodemailer from 'nodemailer'
 import environmentConfig from "../config/environment.config.js";
-import createLogger from '../logs/logger.js'
+import createLogger from '../logs/loggers.js'
 
 export default class TicketManager{
 

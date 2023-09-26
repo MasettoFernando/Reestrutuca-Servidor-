@@ -1,4 +1,4 @@
-import crateLogger from '../logs/logger.js'
+import crateLogger from '../logs/loggers.js'
 import CartManager from '../dao/cartManager.js'
 import handlebars from 'express-handlebars'
 
