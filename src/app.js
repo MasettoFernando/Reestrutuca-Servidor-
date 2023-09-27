@@ -40,15 +40,13 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', './src/views')
 app.set('view engine', 'handlebars')
 
-try {
-    app.use(session({
-      secret: env.session_secret,
-      resave: true,
-      saveUninitialized: true
-    }));
-  } catch (error) {
-    console.error('Error setting up session:', error);
-}
+
+app.use(session({
+    secret: env.session_secret,
+    resave: true,
+    saveUninitialized: true
+}));
+
 
 const swaggerOptions= {
     definition:{
