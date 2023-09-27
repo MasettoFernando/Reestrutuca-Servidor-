@@ -79,7 +79,7 @@ app.use('/api/users', userRouter )
 try {
     await mongoose.connect(env.mongo_uri)
     console.log('DBs connected!')
-    app.listen(env.port, ()=>console.log("Server up"))
+    app.listen(env.port, "0.0.0.0", ()=>console.log("Server up"))
 }catch(error){
     console.log(error)
 }

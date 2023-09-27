@@ -4,7 +4,7 @@ dotenv.config()
 
 export default{
     //app.js
-    port: process.env.PORT,
+    port: process.env.PORT || 8080 ,
     mongo_uri: process.env.MONGO_URI,
     session_secret: process.env.SESSION_SECRET,
     //github passport -- passport.config.js
