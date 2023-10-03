@@ -90,7 +90,9 @@ class CartManager{
         const cart = await cartService.getByIdPopulate(cid, populate)
         const products = cart.products
         const unavailables = []
-        const productsLeft = []
+        const availables = []
+        let success = false
+
         for (let index = 0; index < products.length; index++) {
             const product = products[index]
             const pid = product.pid._id.toString()
@@ -104,20 +106,26 @@ class CartManager{
                     stock: stockAux
                 }
                 await productService.update(newStock, pid)
+                availables.push(pid)
             }
         }
         
-        if(unavailables.length == 0){
-            await ticketManager.generateTicket(cid, email)
-            await this.deleteAllproductsFromACart(cid)
-        }else{
-            await ticketManager.generateTicket(cid, email)
-            await this.deleteAllproductsFromACart(cid)
-            for (let index = 0; index < unavailables.length; index++) {
-                const pid = unavailables[index]
-                await this.addProductToCart(cid, pid)
+        if(availables.length > 0){
+            if(unavailables.length == 0){
+                await ticketManager.generateTicket(cid, email)
+                await this.deleteAllproductsFromACart(cid)
+                success = true
+            }else{
+                await ticketManager.generateTicket(cid, email)
+                await this.deleteAllproductsFromACart(cid)
+                for (let index = 0; index < unavailables.length; index++) {
+                    const pid = unavailables[index]
+                    await this.addProductToCart(cid, pid)
+                }
+                success = true
             }
-        }
+        } 
+        return success      
     }
 }
 

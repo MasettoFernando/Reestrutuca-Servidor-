@@ -1,7 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
 import env from '../config/environment.config.js'
-const router= Router()
+import UserManager from "../dao/userManager.js";
+
+const router = Router()
+const userManager = new UserManager() 
 // GET /session/register --> Shows the register form
 router.get('/register',(req, res)=>{
     res.render('sessions/register')
@@ -29,6 +32,8 @@ router.post('/login',
         return res.status(400).send({status: 'error', error: 'invalid credentials'})
     }
     req.session.user = req.user
+    const email = req.user.email
+    await userManager.updateLastConnection(email)
     res.cookie(env.jwt_cookie_name, req.user.token).redirect('/products')
     
 })
@@ -49,39 +54,5 @@ router.get('/githubcallback',
 router.get('/logout', (req, res)=>{
     res.clearCookie(env.jwt_cookie_name).redirect('/session/login')
 })
-
-// Endpoint para actualizar el usuario a premium
-router.post('/api/users/premium/:uid', async (req, res) => {
-    try {
-        const { uid } = req.params;
-        const user = await UserModel.findById(uid);
-
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-        // Verificar si el usuario ha cargado los documentos requeridos
-        const requiredDocuments = ['identificacion', 'comprobante de domicilio', 'comprobante de estado de cuenta'];
-
-        const hasRequiredDocuments = requiredDocuments.every(docName =>
-            user.documents.some(doc => doc.name.toLowerCase() === docName.toLowerCase())
-        );
-
-        if (!hasRequiredDocuments) {
-            return res.status(400).json({ message: 'Faltan documentos requeridos para ser premium' });
-        }
-
-        // Actualizar el estado del usuario a premium
-        user.isPremium = true;
-
-        await user.save();
-
-        return res.status(200).json({ message: 'Usuario actualizado a premium' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al actualizar el usuario a premium' });
-    }
-});
-
 
 export default router

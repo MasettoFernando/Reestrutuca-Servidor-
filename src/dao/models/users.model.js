@@ -28,8 +28,7 @@ export default class UserModel{
                 }
             ],
             last_connection: {
-                type: Date,          // Fecha y hora de la última conexión
-                default: null       // Valor predeterminado, puede ser null o inicializado según tus necesidades
+                type: Date     // Valor predeterminado, puede ser null o inicializado según tus necesidades
             }
         }
     }

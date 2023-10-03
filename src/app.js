@@ -15,6 +15,7 @@ import errorHandler from './middleware/error.js'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
 import userRouter from '../src/routes/user.router.js'
+import homeRouter from './routes/home.router.js'
 /*
 STATUS CODE 
 100-199: Respuestas informativas
@@ -67,12 +68,13 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Routers
+app.use('/', homeRouter)
 app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
-app.use('/api/products', productsRouter)
+app.use('/api/products',passportCall('jwt'), productsRouter)
 app.use('/api/carts', passportCall('jwt'), CartsRouter)
 app.use('/products', passportCall('jwt'), viewsRouter)
 app.use('/session', sessionsRouter)
-app.use('/api/users', userRouter )
+app.use('/api/users', passportCall('jwt'), userRouter )
 //Mongoose and server
 try {
     await mongoose.connect(env.mongo_uri)

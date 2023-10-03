@@ -2,7 +2,6 @@ import { ticketService } from "../services/index.js";
 import { cartService } from "../services/index.js";
 import nodemailer from 'nodemailer'
 import environmentConfig from "../config/environment.config.js";
-import createLogger from '../logs/loggers.js'
 
 export default class TicketManager{
 
@@ -45,6 +44,24 @@ export default class TicketManager{
     }
     sendTickets = async (purchaser) => {
 
+        const config = {
+            service: 'gmail',
+            auth: {
+                user: environmentConfig.gmail_user,
+                pass: environmentConfig.gmail_pass
+            }
+        }
+        const transporter = nodemailer.createTransport(config)
+        const message = {
+            from: environmentConfig.gmail_user,
+            to: purchaser,
+            subject: 'Purchase finished',
+            html: "your purchase has been successfully. Your product/s will arrive in 14 days. Thank you for your confidence."
+        }
+        transporter.sendMail(message)
+    }
+
+    deleteTicket = async(email) => {
         const config = {
             service: 'gmail',
             auth: {
